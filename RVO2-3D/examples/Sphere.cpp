@@ -80,8 +80,8 @@ void setupScenario(RVO::RVOSimulator *sim)
 	sim->addAgent(RVO::Vector3(10.0f, 0, 0));
 	goals.push_back(RVO::Vector3(-10.0f, 0, 0));
 
-	sim->addAgent(RVO::Vector3(0, 0, 0));
-	goals.push_back(RVO::Vector3(0, 0, 0));
+	sim->addAgent(RVO::Vector3(-10.0f, 0, 0));
+	goals.push_back(RVO::Vector3(10.0f, 0, 0));
 }
 
 #if RVO_OUTPUT_TIME_AND_POSITIONS

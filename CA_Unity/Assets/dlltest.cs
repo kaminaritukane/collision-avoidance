@@ -89,9 +89,9 @@ public class dlltest : MonoBehaviour
         SetAgentDefaults(sim, 10.0f, 10, 1.0f, 0.5f, speed, RvoVector3.Zero);
 
 
-        AddGO(new Vector3(10f, 0, 0.1f), new Vector3(-10f, 0, 0));
+        AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
         AddGO(new Vector3(-10f, 0, 0), new Vector3(10f, 0, 0));
-        AddGO(new Vector3(0, 0.1f, 10f), new Vector3(0, 0, -10f));
+        //AddGO(new Vector3(0, 0.1f, 10f), new Vector3(0, 0, -10f));
     }
 
     private void AddGO( Vector3 pos, Vector3 targetPos )
