@@ -1,0 +1,20 @@
+.vs/
+CA_Unity/Library/
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+RVO2-3D/build/src/RVO.dir/
+RVO2-3D/build/src/Debug/
+RVO2-3D/build/CMakeFiles/

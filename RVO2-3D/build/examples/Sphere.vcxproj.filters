@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\Unity\Projects\CollisionAvoidance\RVO2-3D\examples\Sphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Unity\Projects\CollisionAvoidance\RVO2-3D\examples\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{54BB94D8-26DD-3D58-B652-2E811D0C6222}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
