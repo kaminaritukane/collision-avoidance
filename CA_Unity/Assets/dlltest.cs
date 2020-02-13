@@ -79,19 +79,28 @@ public class dlltest : MonoBehaviour
     [SerializeField] GameObject prefab = null;
     private readonly List<Transform> gos = new List<Transform>();
 
-    private float speed = 3.0f;
+    [SerializeField] private float speed = 3.0f;
+    [SerializeField] private int count = 100;
 
     private void Start()
     {
         //Debug.Log(calAdd(1, 2));
 
         sim = CreateSimulator();
-        SetAgentDefaults(sim, 10.0f, 10, 1.0f, 0.5f, speed, RvoVector3.Zero);
+        SetAgentDefaults(sim, 5.0f, 10, 1, 0.5f, speed, RvoVector3.Zero);
 
 
-        AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
         AddGO(new Vector3(-10f, 0, 0), new Vector3(10f, 0, 0));
-        //AddGO(new Vector3(0, 0.1f, 10f), new Vector3(0, 0, -10f));
+        AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
+
+        //AddGO(new Vector3(-10f, 0, 10.0001f), new Vector3(10f, 0, 10.0001f));
+        //AddGO(new Vector3(10f, 0, 10.0001f), new Vector3(-10f, 0, 10.0f));
+
+        //for( int i=0; i<count; ++i )
+        //{
+        //    var pos = UnityEngine.Random.insideUnitSphere * 50.0f;
+        //    AddGO(pos, -pos);
+        //}
     }
 
     private void AddGO( Vector3 pos, Vector3 targetPos )
@@ -126,7 +135,7 @@ public class dlltest : MonoBehaviour
                 gos[(int)i].position = v3Pos;
 
                 var v3Vel = new Vector3(vel.x, vel.y, vel.z);
-                if (v3Vel.sqrMagnitude > float.Epsilon)
+                if (v3Vel.sqrMagnitude > 0.00001f)
                 {
                     gos[(int)i].rotation = Quaternion.LookRotation(v3Vel);
                 }
@@ -148,23 +157,28 @@ public class dlltest : MonoBehaviour
 
     private bool ReachGoal()
     {
-        RvoVector3 pos = RvoVector3.Zero;
-        if ( GetAgentPosition(ref pos, sim, 0) )
+        int nAgents = (int)GetNumAgents(sim);
+        for (int i = 0; i < nAgents; ++i)
         {
-            float radius = 0.0f;
-            if (GetAgentRadius(ref radius, sim, 0))
+            RvoVector3 pos = RvoVector3.Zero;
+            if (GetAgentPosition(ref pos, sim, (ulong)i))
             {
-                var v3Pos = new Vector3(pos.x, pos.y, pos.z);
-                var goalVector = goals[0] - v3Pos;
-
-                if (goalVector.sqrMagnitude < radius * radius)
+                float radius = 0.0f;
+                if (GetAgentRadius(ref radius, sim, (ulong)i))
                 {
-                    return true;
+                    var v3Pos = new Vector3(pos.x, pos.y, pos.z);
+                    var goalVector = goals[i] - v3Pos;
+
+                    if (goalVector.sqrMagnitude > radius * radius)
+                    {
+                        return false;
+                    }
                 }
             }
         }
 
-        return false;
+        Debug.Log("Goal!");
+        return true;
     }
 
     private void OnDisable()

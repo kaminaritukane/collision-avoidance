@@ -56,12 +56,12 @@ std::vector<RVO::Vector3> goals;
 void setupScenario(RVO::RVOSimulator *sim)
 {
 	/* Specify the global time step of the simulation. */
-	//sim->setTimeStep(0.125f);
-	sim->setTimeStep(1.0f);
+	sim->setTimeStep(0.125f);
+	//sim->setTimeStep(1.0f);
 
 	/* Specify the default parameters for agents that are subsequently added. */
 	//sim->setAgentDefaults(15.0f, 10, 10.0f, 1.5f, 2.0f);
-	sim->setAgentDefaults(10.0f, 10, 1.0f, 1.0f, 1.0f);
+	sim->setAgentDefaults(10.0f, 10, 3.0f, 0.5f, 3.0f);
 
 	///* Add agents, specifying their start position, and store their goals on the opposite side of the environment. */
 	//for (float a = 0; a < M_PI; a += 0.1f) {
@@ -77,11 +77,17 @@ void setupScenario(RVO::RVOSimulator *sim)
 	//	}
 	//}
 
+	sim->addAgent(RVO::Vector3(-10.0f, 0, 0));
+	goals.push_back(RVO::Vector3(10.0f, 0, 0));
+
 	sim->addAgent(RVO::Vector3(10.0f, 0, 0));
 	goals.push_back(RVO::Vector3(-10.0f, 0, 0));
 
-	sim->addAgent(RVO::Vector3(-10.0f, 0, 0));
-	goals.push_back(RVO::Vector3(10.0f, 0, 0));
+	sim->addAgent(RVO::Vector3(-10.0f, 0, 5.001f));
+	goals.push_back(RVO::Vector3(10.0f, 0, 5.001f));
+
+	sim->addAgent(RVO::Vector3(10.0f, 0, 5));
+	goals.push_back(RVO::Vector3(-10.0f, 0, 5));
 }
 
 #if RVO_OUTPUT_TIME_AND_POSITIONS

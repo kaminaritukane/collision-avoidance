@@ -105,7 +105,7 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\Unity\Assets\Plugins\ /Y /F</Command>
+      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\CA_Unity\Assets\Plugins\ /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -140,7 +140,7 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\Unity\Assets\Plugins\ /Y /F</Command>
+      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\CA_Unity\Assets\Plugins\ /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
@@ -175,7 +175,7 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\Unity\Assets\Plugins\ /Y /F</Command>
+      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\CA_Unity\Assets\Plugins\ /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
@@ -209,7 +209,7 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\Unity\Assets\Plugins\ /Y /F</Command>
+      <Command>xcopy $(TargetPath) $(SolutionDir)..\..\CA_Unity\Assets\Plugins\ /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

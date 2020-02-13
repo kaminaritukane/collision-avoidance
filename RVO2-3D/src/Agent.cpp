@@ -133,9 +133,16 @@ namespace RVO {
 			Plane plane;
 			Vector3 u;
 
-			if (distSq > combinedRadiusSq) {
+			if (distSq - combinedRadiusSq > RVO_EPSILON) {
 				/* No collision. */
-				const Vector3 w = relativeVelocity - invTimeHorizon * relativePosition;
+				Vector3 w = relativeVelocity - invTimeHorizon * relativePosition;
+
+				Vector3 rd = Vector3((rand() % 100) / 100.0f,
+					(rand() % 100) / 100.0f,
+					(rand() % 100) / 100.0f);
+
+				w = w + rd;
+
 				/* Vector from cutoff center to relative velocity. */
 				const float wLengthSq = absSq(w);
 
@@ -166,12 +173,28 @@ namespace RVO {
 			else {
 				/* Collision. */
 				const float invTimeStep = 1.0f / sim_->timeStep_;
-				const Vector3 w = relativeVelocity - invTimeStep * relativePosition;
-				const float wLength = abs(w);
-				const Vector3 unitW = w / wLength;
+				Vector3 w = relativeVelocity - invTimeStep * relativePosition;
+				float wLength = abs(w);
 
-				plane.normal = unitW;
-				u = (combinedRadius * invTimeStep - wLength) * unitW;
+				////if ( wLength < RVO_EPSILON )
+				//{
+				//	Vector3 w = Vector3( (rand() % 100) / 100.0f,
+				//		(rand() % 100) / 100.0f,
+				//		(rand() % 100) / 100.0f );
+				//	float wLength = abs(w);
+
+				//	const Vector3 unitW = w / wLength;
+
+				//	plane.normal = unitW;
+				//	u = (combinedRadius * invTimeStep - wLength) * unitW;
+				//}
+				//else
+				//{
+					const Vector3 unitW = w / wLength;
+
+					plane.normal = unitW;
+					u = (combinedRadius * invTimeStep - wLength) * unitW;
+				//}
 			}
 
 			plane.point = velocity_ + 0.5f * u;
