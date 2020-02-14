@@ -137,10 +137,7 @@ namespace RVO {
 				/* No collision. */
 				Vector3 w = relativeVelocity - invTimeHorizon * relativePosition;
 
-				Vector3 rd = Vector3((rand() % 100) / 100.0f,
-					(rand() % 100) / 100.0f,
-					(rand() % 100) / 100.0f);
-
+				Vector3 rd = gerRandomVector3();
 				w = w + rd;
 
 				/* Vector from cutoff center to relative velocity. */
@@ -173,28 +170,21 @@ namespace RVO {
 			else {
 				/* Collision. */
 				const float invTimeStep = 1.0f / sim_->timeStep_;
-				Vector3 w = relativeVelocity - invTimeStep * relativePosition;
+				//Vector3 w = relativeVelocity - invTimeStep * relativePosition;
+				//float wLength = abs(w);
+
+				//const Vector3 unitW = w / wLength;
+
+				//plane.normal = unitW;
+				//u = (combinedRadius * invTimeStep - wLength) * unitW;
+
+				Vector3 w = gerRandomVector3();
 				float wLength = abs(w);
 
-				////if ( wLength < RVO_EPSILON )
-				//{
-				//	Vector3 w = Vector3( (rand() % 100) / 100.0f,
-				//		(rand() % 100) / 100.0f,
-				//		(rand() % 100) / 100.0f );
-				//	float wLength = abs(w);
+				const Vector3 unitW = w / wLength;
 
-				//	const Vector3 unitW = w / wLength;
-
-				//	plane.normal = unitW;
-				//	u = (combinedRadius * invTimeStep - wLength) * unitW;
-				//}
-				//else
-				//{
-					const Vector3 unitW = w / wLength;
-
-					plane.normal = unitW;
-					u = (combinedRadius * invTimeStep - wLength) * unitW;
-				//}
+				plane.normal = unitW;
+				u = (combinedRadius * invTimeStep - wLength) * unitW;
 			}
 
 			plane.point = velocity_ + 0.5f * u;
@@ -238,6 +228,13 @@ namespace RVO {
 	{
 		velocity_ = newVelocity_;
 		position_ += velocity_ * sim_->timeStep_;
+	}
+
+	Vector3 Agent::gerRandomVector3()
+	{
+		return Vector3((rand() % 100 - 50) / 100.0f,
+			(rand() % 100 - 50) / 100.0f,
+			(rand() % 100 - 50) / 100.0f);
 	}
 
 	bool linearProgram1(const std::vector<Plane> &planes, size_t planeNo, const Line &line, float radius, const Vector3 &optVelocity, bool directionOpt, Vector3 &result)

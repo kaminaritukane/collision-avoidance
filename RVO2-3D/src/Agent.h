@@ -80,6 +80,8 @@ namespace RVO {
 		 */
 		void update();
 
+		Vector3 gerRandomVector3();
+
 		Vector3 newVelocity_;
 		Vector3 position_;
 		Vector3 prefVelocity_;

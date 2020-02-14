@@ -44,7 +44,7 @@ namespace RVO {
 	{
 		kdTree_ = new KdTree(this);
 
-		srand(GetTickCount64());
+		srand(GetTickCount());
 	}
 
 	RVOSimulator::RVOSimulator(float timeStep, float neighborDist, size_t maxNeighbors, float timeHorizon, float radius, float maxSpeed, const Vector3 &velocity) : defaultAgent_(NULL), kdTree_(NULL), globalTime_(0.0f), timeStep_(timeStep)

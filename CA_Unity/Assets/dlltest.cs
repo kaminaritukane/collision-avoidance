@@ -90,17 +90,17 @@ public class dlltest : MonoBehaviour
         SetAgentDefaults(sim, 5.0f, 10, 1, 0.5f, speed, RvoVector3.Zero);
 
 
-        AddGO(new Vector3(-10f, 0, 0), new Vector3(10f, 0, 0));
-        AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
+        //AddGO(new Vector3(-10f, 0, 0), new Vector3(10f, 0, 0));
+        //AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
 
         //AddGO(new Vector3(-10f, 0, 10.0001f), new Vector3(10f, 0, 10.0001f));
         //AddGO(new Vector3(10f, 0, 10.0001f), new Vector3(-10f, 0, 10.0f));
 
-        //for( int i=0; i<count; ++i )
-        //{
-        //    var pos = UnityEngine.Random.insideUnitSphere * 50.0f;
-        //    AddGO(pos, -pos);
-        //}
+        for (int i = 0; i < count; ++i)
+        {
+            var pos = UnityEngine.Random.insideUnitSphere * 50.0f;
+            AddGO(pos, -pos);
+        }
     }
 
     private void AddGO( Vector3 pos, Vector3 targetPos )
