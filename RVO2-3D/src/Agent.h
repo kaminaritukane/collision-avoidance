@@ -98,6 +98,8 @@ namespace RVO {
 
 		friend class KdTree;
 		friend class RVOSimulator;
+
+		bool isStatic;
 	};
 }
 

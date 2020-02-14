@@ -326,8 +326,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 1560027513139224907, guid: f8a83e6dee08fa24f8705fa84b0998de, type: 3}
+  staticPrefab: {fileID: 1560027513139224907, guid: d0e9ca7a9ba262b4b8467d1b87885abf,
+    type: 3}
   speed: 3
-  count: 500
+  count: 100
+  staticCount: 500
 --- !u!4 &1012962689
 Transform:
   m_ObjectHideFlags: 0

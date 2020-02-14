@@ -109,6 +109,11 @@ namespace RVO {
 
 	void Agent::computeNeighbors()
 	{
+		if (isStatic)
+		{
+			return;
+		}
+
 		agentNeighbors_.clear();
 
 		if (maxNeighbors_ > 0) {
@@ -118,6 +123,11 @@ namespace RVO {
 
 	void Agent::computeNewVelocity()
 	{
+		if (isStatic)
+		{
+			return;
+		}
+
 		orcaPlanes_.clear();
 		const float invTimeHorizon = 1.0f / timeHorizon_;
 
@@ -226,6 +236,11 @@ namespace RVO {
 
 	void Agent::update()
 	{
+		if (isStatic)
+		{
+			return;
+		}
+
 		velocity_ = newVelocity_;
 		position_ += velocity_ * sim_->timeStep_;
 	}

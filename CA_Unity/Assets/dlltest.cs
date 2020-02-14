@@ -50,7 +50,7 @@ public class dlltest : MonoBehaviour
         RvoVector3 velocity);
 
     [DllImport("RVO")]
-    public static extern ulong AddAgent(IntPtr sim, RvoVector3 position);
+    public static extern ulong AddAgent(IntPtr sim, RvoVector3 position, bool isStatic);
 
     [DllImport("RVO")]
     public static extern ulong GetNumAgents(IntPtr sim);
@@ -72,26 +72,31 @@ public class dlltest : MonoBehaviour
 
     private IntPtr sim = IntPtr.Zero;
 
-    private readonly List<Vector3> goals = new List<Vector3>();
+    private readonly List<Vector3?> goals = new List<Vector3?>();
 
     private bool reachedGoal = false;
 
     [SerializeField] GameObject prefab = null;
+    [SerializeField] GameObject staticPrefab = null;
+
     private readonly List<Transform> gos = new List<Transform>();
 
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private int count = 100;
+
+    [SerializeField] private int staticCount = 100;
 
     private void Start()
     {
         //Debug.Log(calAdd(1, 2));
 
         sim = CreateSimulator();
-        SetAgentDefaults(sim, 5.0f, 10, 1, 0.5f, speed, RvoVector3.Zero);
+        SetAgentDefaults(sim, 3.0f, 10, 1, 0.5f, speed, RvoVector3.Zero);
 
 
         //AddGO(new Vector3(-10f, 0, 0), new Vector3(10f, 0, 0));
-        //AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
+        ////AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
+        //AddStaticGo(Vector3.zero);
 
         //AddGO(new Vector3(-10f, 0, 10.0001f), new Vector3(10f, 0, 10.0001f));
         //AddGO(new Vector3(10f, 0, 10.0001f), new Vector3(-10f, 0, 10.0f));
@@ -101,14 +106,29 @@ public class dlltest : MonoBehaviour
             var pos = UnityEngine.Random.insideUnitSphere * 50.0f;
             AddGO(pos, -pos);
         }
+
+        for (int i = 0; i < staticCount; ++i)
+        {
+            var pos = UnityEngine.Random.insideUnitSphere * 50.0f;
+            AddStaticGo(pos);
+        }
     }
 
-    private void AddGO( Vector3 pos, Vector3 targetPos )
+    private void AddGO( Vector3 pos, Vector3 targetPos)
     {
-        AddAgent(sim, new RvoVector3(pos));
+        AddAgent(sim, new RvoVector3(pos), false);
         goals.Add(targetPos);
 
         var go = GameObject.Instantiate(prefab, pos, Quaternion.identity);
+        gos.Add(go.transform);
+    }
+
+    private void AddStaticGo(Vector3 pos)
+    {
+        AddAgent(sim, new RvoVector3(pos), true);
+        goals.Add(null);
+
+        var go = GameObject.Instantiate(staticPrefab, pos, Quaternion.identity);
         gos.Add(go.transform);
     }
 
@@ -140,13 +160,17 @@ public class dlltest : MonoBehaviour
                     gos[(int)i].rotation = Quaternion.LookRotation(v3Vel);
                 }
 
-                var goalVector = goals[(int)i] - v3Pos;
-                if ( goalVector.sqrMagnitude > 1.0f )
+                var gl = goals[(int)i];
+                if ( gl.HasValue )
                 {
-                    goalVector = goalVector.normalized * speed;
-                }
+                    var goalVector = gl.Value - v3Pos;
+                    if (goalVector.sqrMagnitude > 1.0f)
+                    {
+                        goalVector = goalVector.normalized * speed;
+                    }
 
-                SetAgentPrefVelocity(sim, i, new RvoVector3(goalVector));
+                    SetAgentPrefVelocity(sim, i, new RvoVector3(goalVector));
+                }
             }
         }
 
@@ -160,18 +184,22 @@ public class dlltest : MonoBehaviour
         int nAgents = (int)GetNumAgents(sim);
         for (int i = 0; i < nAgents; ++i)
         {
-            RvoVector3 pos = RvoVector3.Zero;
-            if (GetAgentPosition(ref pos, sim, (ulong)i))
+            var gl = goals[i];
+            if ( gl.HasValue )
             {
-                float radius = 0.0f;
-                if (GetAgentRadius(ref radius, sim, (ulong)i))
+                RvoVector3 pos = RvoVector3.Zero;
+                if (GetAgentPosition(ref pos, sim, (ulong)i))
                 {
-                    var v3Pos = new Vector3(pos.x, pos.y, pos.z);
-                    var goalVector = goals[i] - v3Pos;
-
-                    if (goalVector.sqrMagnitude > radius * radius)
+                    float radius = 0.0f;
+                    if (GetAgentRadius(ref radius, sim, (ulong)i))
                     {
-                        return false;
+                        var v3Pos = new Vector3(pos.x, pos.y, pos.z);
+                        var goalVector = gl.Value - v3Pos;
+
+                        if (goalVector.sqrMagnitude > radius * radius)
+                        {
+                            return false;
+                        }
                     }
                 }
             }

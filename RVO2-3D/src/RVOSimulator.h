@@ -104,9 +104,10 @@ namespace RVO {
 		/**
 		 * \brief   Adds a new agent with default properties to the simulation.
 		 * \param   position  The three-dimensional starting position of this agent.
+		 * \param   isStatic  Static agent doesn't move.
 		 * \return  The number of the agent, or RVO::RVO_ERROR when the agent defaults have not been set.
 		 */
-		RVO_API size_t addAgent(const Vector3 &position);
+		RVO_API size_t addAgent(const Vector3 &position, bool isStatic = false);
 
 		/**
 		 * \brief   Adds a new agent to the simulation.
@@ -117,9 +118,14 @@ namespace RVO {
 		 * \param   radius        The radius of this agent. Must be non-negative.
 		 * \param   maxSpeed      The maximum speed of this agent. Must be non-negative.
 		 * \param   velocity      The initial three-dimensional linear velocity of this agent (optional).
+		 * \param   isStatic      Static agent doesn't move.
 		 * \return  The number of the agent.
 		 */
-		RVO_API size_t addAgent(const Vector3 &position, float neighborDist, size_t maxNeighbors, float timeHorizon, float radius, float maxSpeed, const Vector3 &velocity = Vector3());
+		RVO_API size_t addAgent(const Vector3 &position, float neighborDist,
+			size_t maxNeighbors, float timeHorizon,
+			float radius, float maxSpeed,
+			const Vector3 &velocity = Vector3(),
+			bool isStatic = false);
 
 		/**
 		 * \brief   Lets the simulator perform a simulation step and updates the three-dimensional position and three-dimensional velocity of each agent.

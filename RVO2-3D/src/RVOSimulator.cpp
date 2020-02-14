@@ -102,7 +102,7 @@ namespace RVO {
 		agents_.pop_back();
 	}
 
-	size_t RVOSimulator::addAgent(const Vector3 &position)
+	size_t RVOSimulator::addAgent(const Vector3 &position, bool isStatic)
 	{
 		if (defaultAgent_ == NULL) {
 			return RVO_ERROR;
@@ -117,6 +117,7 @@ namespace RVO {
 		agent->radius_ = defaultAgent_->radius_;
 		agent->timeHorizon_ = defaultAgent_->timeHorizon_;
 		agent->velocity_ = defaultAgent_->velocity_;
+		agent->isStatic = isStatic;
 
 		agent->id_ = agents_.size();
 
@@ -125,7 +126,11 @@ namespace RVO {
 		return agents_.size() - 1;
 	}
 
-	size_t RVOSimulator::addAgent(const Vector3 &position, float neighborDist, size_t maxNeighbors, float timeHorizon, float radius, float maxSpeed, const Vector3 &velocity)
+	size_t RVOSimulator::addAgent(const Vector3 &position, float neighborDist,
+		size_t maxNeighbors, float timeHorizon,
+		float radius, float maxSpeed,
+		const Vector3 &velocity,
+		bool isStatic)
 	{
 		Agent *agent = new Agent(this);
 
@@ -136,6 +141,7 @@ namespace RVO {
 		agent->radius_ = radius;
 		agent->timeHorizon_ = timeHorizon;
 		agent->velocity_ = velocity;
+		agent->isStatic = isStatic;
 
 		agent->id_ = agents_.size();
 
