@@ -31,13 +31,16 @@ void SetAgentDefaults(RVO::RVOSimulator* sim, float neighborDist,
 	}
 }
 
-size_t AddAgent(RVO::RVOSimulator* sim, const RvoVector3& position, bool isStatic)
+size_t AddAgent(RVO::RVOSimulator* sim, const RvoVector3& position,
+	float raduis,
+	bool isStatic)
 {
 	size_t ret = 0;
 	if (sim != nullptr)
 	{
 		ret = sim->addAgent(RVO::Vector3(position.x, position.y, position.z),
 			isStatic);
+		sim->setAgentRadius(ret, raduis);
 	}
 	return ret;
 }

@@ -33,6 +33,7 @@ void SetAgentDefaults(RVO::RVOSimulator * sim,
 
 extern "C" __declspec(dllexport)
 size_t AddAgent(RVO::RVOSimulator * sim, const RvoVector3& position,
+	float radius,
 	bool isStatic = false);
 
 extern "C" __declspec(dllexport)

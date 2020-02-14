@@ -50,7 +50,7 @@ public class dlltest : MonoBehaviour
         RvoVector3 velocity);
 
     [DllImport("RVO")]
-    public static extern ulong AddAgent(IntPtr sim, RvoVector3 position, bool isStatic);
+    public static extern ulong AddAgent(IntPtr sim, RvoVector3 position, float radius, bool isStatic);
 
     [DllImport("RVO")]
     public static extern ulong GetNumAgents(IntPtr sim);
@@ -86,20 +86,23 @@ public class dlltest : MonoBehaviour
 
     [SerializeField] private int staticCount = 100;
 
+    float defaultAgentRadius = 0.5f;
+
     private void Start()
     {
         //Debug.Log(calAdd(1, 2));
 
         sim = CreateSimulator();
-        SetAgentDefaults(sim, 3.0f, 10, 1, 0.5f, speed, RvoVector3.Zero);
+        SetAgentDefaults(sim, 3.0f, 10, 1, defaultAgentRadius, speed, RvoVector3.Zero);
 
 
         //AddGO(new Vector3(-10f, 0, 0), new Vector3(10f, 0, 0));
         //AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
 
+        var offSet = new Vector3(-100.0f, 0, 0);
         for (int i = 0; i < count; ++i)
         {
-            var pos = UnityEngine.Random.insideUnitSphere * 50.0f;
+            var pos = UnityEngine.Random.insideUnitSphere * 50.0f + offSet;
             AddGO(pos, -pos);
         }
 
@@ -112,19 +115,25 @@ public class dlltest : MonoBehaviour
 
     private void AddGO( Vector3 pos, Vector3 targetPos)
     {
-        AddAgent(sim, new RvoVector3(pos), false);
+        var radius = UnityEngine.Random.Range(0.2f, 2.0f);
+        AddAgent(sim, new RvoVector3(pos), radius, false);
         goals.Add(targetPos);
 
         var go = GameObject.Instantiate(prefab, pos, Quaternion.identity);
+        var scale = radius / defaultAgentRadius;
+        go.transform.localScale = new Vector3(scale, scale, scale);
         gos.Add(go.transform);
     }
 
     private void AddStaticGo(Vector3 pos)
     {
-        AddAgent(sim, new RvoVector3(pos), true);
+        var radius = UnityEngine.Random.Range(2.0f, 3.0f);
+        AddAgent(sim, new RvoVector3(pos), radius, true);
         goals.Add(null);
 
         var go = GameObject.Instantiate(staticPrefab, pos, Quaternion.identity);
+        var scale = radius / defaultAgentRadius;
+        go.transform.localScale = new Vector3(scale, scale, scale);
         gos.Add(go.transform);
     }
 
