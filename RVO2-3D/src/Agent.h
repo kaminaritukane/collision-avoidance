@@ -81,11 +81,16 @@ namespace RVO {
 		void update();
 
 		Vector3 gerRandomVector3();
+		bool checkToJostle();
 
 		Vector3 newVelocity_;
-		Vector3 position_;
 		Vector3 prefVelocity_;
 		Vector3 velocity_;
+
+		Vector3 position_;
+		Vector3 lastPosition_;
+		float slowMoveTime_ = 0.0f;
+
 		RVOSimulator *sim_;
 		size_t id_;
 		size_t maxNeighbors_;

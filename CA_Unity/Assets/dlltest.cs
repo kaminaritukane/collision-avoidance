@@ -95,11 +95,7 @@ public class dlltest : MonoBehaviour
 
 
         //AddGO(new Vector3(-10f, 0, 0), new Vector3(10f, 0, 0));
-        ////AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
-        //AddStaticGo(Vector3.zero);
-
-        //AddGO(new Vector3(-10f, 0, 10.0001f), new Vector3(10f, 0, 10.0001f));
-        //AddGO(new Vector3(10f, 0, 10.0001f), new Vector3(-10f, 0, 10.0f));
+        //AddGO(new Vector3(10f, 0, 0), new Vector3(-10f, 0, 0));
 
         for (int i = 0; i < count; ++i)
         {

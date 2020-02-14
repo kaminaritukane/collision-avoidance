@@ -44,6 +44,9 @@ namespace RVO {
 	 */
 	const float RVO_EPSILON = 0.00001f;
 
+	const float MOVE_TOO_SLOW_SQ = 0.01f;
+	const float START_TO_JOSTLE_TIME = 1.0f;
+
 	/**
 	 * \brief   Defines a directed line.
 	 */
@@ -147,9 +150,6 @@ namespace RVO {
 				/* No collision. */
 				Vector3 w = relativeVelocity - invTimeHorizon * relativePosition;
 
-				Vector3 rd = gerRandomVector3();
-				w = w + rd;
-
 				/* Vector from cutoff center to relative velocity. */
 				const float wLengthSq = absSq(w);
 
@@ -157,7 +157,12 @@ namespace RVO {
 
 				if (dotProduct < 0.0f && sqr(dotProduct) > combinedRadiusSq * wLengthSq) {
 					/* Project on cut-off circle. */
-					const float wLength = std::sqrt(wLengthSq);
+					float wLength = std::sqrt(wLengthSq);
+					if (wLength < RVO_EPSILON)
+					{
+						w = gerRandomVector3();
+						wLength = abs(w);
+					}
 					const Vector3 unitW = w / wLength;
 
 					plane.normal = unitW;
@@ -169,8 +174,13 @@ namespace RVO {
 					const float b = relativePosition * relativeVelocity;
 					const float c = absSq(relativeVelocity) - absSq(cross(relativePosition, relativeVelocity)) / (distSq - combinedRadiusSq);
 					const float t = (b + std::sqrt(sqr(b) - a * c)) / a;
-					const Vector3 w = relativeVelocity - t * relativePosition;
-					const float wLength = abs(w);
+					Vector3 w = relativeVelocity - t * relativePosition;
+					float wLength = abs(w);
+					if (wLength < RVO_EPSILON)
+					{
+						w = gerRandomVector3();
+						wLength = abs(w);
+					}
 					const Vector3 unitW = w / wLength;
 
 					plane.normal = unitW;
@@ -180,16 +190,14 @@ namespace RVO {
 			else {
 				/* Collision. */
 				const float invTimeStep = 1.0f / sim_->timeStep_;
-				//Vector3 w = relativeVelocity - invTimeStep * relativePosition;
-				//float wLength = abs(w);
-
-				//const Vector3 unitW = w / wLength;
-
-				//plane.normal = unitW;
-				//u = (combinedRadius * invTimeStep - wLength) * unitW;
-
-				Vector3 w = gerRandomVector3();
+				Vector3 w = relativeVelocity - invTimeStep * relativePosition;
 				float wLength = abs(w);
+
+				if (wLength < RVO_EPSILON)
+				{
+					w = gerRandomVector3();
+					wLength = abs(w);
+				}
 
 				const Vector3 unitW = w / wLength;
 
@@ -242,7 +250,14 @@ namespace RVO {
 		}
 
 		velocity_ = newVelocity_;
+
+		lastPosition_ = position_;
 		position_ += velocity_ * sim_->timeStep_;
+
+		if (checkToJostle())
+		{
+			velocity_ += gerRandomVector3();
+		}
 	}
 
 	Vector3 Agent::gerRandomVector3()
@@ -250,6 +265,21 @@ namespace RVO {
 		return Vector3((rand() % 100 - 50) / 100.0f,
 			(rand() % 100 - 50) / 100.0f,
 			(rand() % 100 - 50) / 100.0f);
+	}
+
+	bool Agent::checkToJostle()
+	{
+		Vector3 moved = position_ - lastPosition_;
+		if (absSq(moved) < MOVE_TOO_SLOW_SQ)
+		{
+			slowMoveTime_ += sim_->timeStep_;
+		}
+		else
+		{
+			slowMoveTime_ = 0.0f;
+		}
+
+		return slowMoveTime_ > START_TO_JOSTLE_TIME;
 	}
 
 	bool linearProgram1(const std::vector<Plane> &planes, size_t planeNo, const Line &line, float radius, const Vector3 &optVelocity, bool directionOpt, Vector3 &result)
